@@ -5,32 +5,38 @@ import OrderForm from '../OrderForm/OrderForm'
 import { useEffect, useState } from "react";
 
 function App() {
-  const [orders, setOrders] = useState({});
+  const [orders, setOrders] = useState([]);
   const [error, setError] = useState('')
 
-  // useEffect(() => {
-  //   getOrders().catch((err) => console.error("Error fetching:", err));
-  // });
 
   useEffect(() => {
     getOrders()
-    .then((data) => setOrders(data))
+    .then((data) => setOrders(data.orders))
     .catch((error) => {
       console.log(error.message);
       setError(
         `${error.message}: Something went wrong. Please try again.`
       );
     });
-  }, {})
+  }, [])
+
+  console.log('ORDERS', orders)
+
+
+  
 
   return (
     <main className="App">
       <header>
         <h1>Burrito Builder</h1>
       </header>
-      <OrderForm />
+      <OrderForm orders={orders} setOrders={setOrders} />
+      {orders.length ?
+       <Orders orders={orders}  /> :
+        <p>There are currently no orders.</p>
+      }
 
-      {/* <Orders orders={"Here is where orders go"} /> */}
+     
 
     </main>
   );

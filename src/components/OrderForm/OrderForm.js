@@ -1,12 +1,23 @@
+import './OrderForm.css';
 import { useState } from "react";
 
-function OrderForm(props) {
+function OrderForm({ orders }) {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState([]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
+    const newOrder = {
+      id: orders.length +1,
+      name: name,
+      ingredients: ingredients,
+    }
+    setOrders([...orders, newOrder]);
     clearInputs();
+  }
+
+  function handleClick(ingredient) {
+      setIngredients ([...ingredients, ingredient])
   }
 
   function clearInputs() {
@@ -33,7 +44,7 @@ function OrderForm(props) {
       <button
         key={ingredient}
         name={ingredient}
-        // onClick={(e) => }
+        onClick={() => handleClick(ingredient)}
       >
         {ingredient}
       </button>
@@ -41,20 +52,23 @@ function OrderForm(props) {
   });
 
   return (
-    <form>
+    <form onSubmit={(event) => event.preventDefault()}>
+      <label htmlFor="name">
       <input
         type="text"
         placeholder="Name"
         name="name"
+        id="name"
         value={name}
-        // onChange={(e) => }
+        onChange={(event) => setName(event.target.value)}
       />
+      </label>
 
       {ingredientButtons}
 
       <p>Order: {ingredients.join(", ") || "Nothing selected"}</p>
 
-      <button onClick={(e) => handleSubmit(e)}>Submit Order</button>
+      <button onClick={(event) => handleSubmit(event)}>Submit Order</button>
     </form>
   );
 }
