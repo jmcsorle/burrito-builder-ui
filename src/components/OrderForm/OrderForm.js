@@ -60,7 +60,7 @@ function OrderForm({ orders, setOrders, error, setError, postNewOrder }) {
   });
 
   return (
-    <form onSubmit={(event) => event.preventDefault()}>
+    <form className="order-form" onSubmit={(event) => event.preventDefault()}>
       <label htmlFor="name">
       <input
         type="text"
@@ -72,7 +72,9 @@ function OrderForm({ orders, setOrders, error, setError, postNewOrder }) {
       />
       </label>
 
-      {ingredientButtons}
+      <label data-testid="ingredient-buttons">
+        {ingredientButtons}
+      </label>
 
       {error && (
         <p className="error">{error}</p>
@@ -81,7 +83,7 @@ function OrderForm({ orders, setOrders, error, setError, postNewOrder }) {
       {!error && (
       <p className="default-message">New Order: {ingredients.join(", ") || "Nothing is selected yet."}</p>)}
 
-      <button onClick={(event) => handleSubmit(event)}>Submit Order</button>
+      <button className="submit-button" onClick={(event) => handleSubmit(event)}>Submit Order</button>
     </form>
   );
 }
