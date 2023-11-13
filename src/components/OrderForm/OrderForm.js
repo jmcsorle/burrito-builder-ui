@@ -1,17 +1,34 @@
+import './OrderForm.css';
 import { useState } from "react";
 
-function OrderForm(props) {
+function OrderForm({ orders, setOrders, error, setError}) {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState([]);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    clearInputs();
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    if (name.trim() === "" || ingredients.length === 0) {
+      setError("We're sorry. Your order is incomplete. Please provide both a name and ingredients to complete your order.")
+    } else {
+      const newOrder = {
+        id: orders.length + 1,
+        name: name,
+        ingredients: ingredients,
+      }
+      setOrders([...orders, newOrder]);
+      clearInputs();
+    }
+  }
+
+  function handleClick(ingredient) {
+      setIngredients ([...ingredients, ingredient])
   }
 
   function clearInputs() {
     setName("");
     setIngredients([]);
+    setError("");
   };
 
   const possibleIngredients = [
@@ -33,7 +50,7 @@ function OrderForm(props) {
       <button
         key={ingredient}
         name={ingredient}
-        // onClick={(e) => }
+        onClick={() => handleClick(ingredient)}
       >
         {ingredient}
       </button>
@@ -41,20 +58,28 @@ function OrderForm(props) {
   });
 
   return (
-    <form>
+    <form onSubmit={(event) => event.preventDefault()}>
+      <label htmlFor="name">
       <input
         type="text"
         placeholder="Name"
         name="name"
+        id="name"
         value={name}
-        // onChange={(e) => }
+        onChange={(event) => setName(event.target.value)}
       />
+      </label>
 
       {ingredientButtons}
 
-      <p>Order: {ingredients.join(", ") || "Nothing selected"}</p>
+      {error && (
+        <p className="error">{error}</p>
+      )}
 
-      <button onClick={(e) => handleSubmit(e)}>Submit Order</button>
+      {!error && (
+      <p className="default-message">New Order: {ingredients.join(", ") || "Nothing is selected yet."}</p>)}
+
+      <button onClick={(event) => handleSubmit(event)}>Submit Order</button>
     </form>
   );
 }
