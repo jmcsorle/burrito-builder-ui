@@ -1,7 +1,7 @@
 import './OrderForm.css';
 import { useState } from "react";
 
-function OrderForm({ orders, setOrders, error, setError}) {
+function OrderForm({ orders, setOrders, error, setError, postNewOrder }) {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState([]);
 
@@ -16,6 +16,8 @@ function OrderForm({ orders, setOrders, error, setError}) {
         name: name,
         ingredients: ingredients,
       }
+      
+      postNewOrder(newOrder)
       setOrders([...orders, newOrder]);
       clearInputs();
     }
