@@ -16,7 +16,7 @@ const Orders = (props) => {
   });
 
   return (
-    <section>{orderCards.length ? orderCards : <p>No orders yet!</p>}</section>
+    <section className="current-orders">{orderCards.length ? orderCards : <p>No orders yet!</p>}</section>
   );
 };
 
