@@ -1,5 +1,5 @@
 import "./App.css";
-import { getOrders} from '../../apiCalls';
+import { getOrders, addOrder} from '../../apiCalls';
 import Orders from '../Orders/Orders';
 import OrderForm from '../OrderForm/OrderForm'
 import { useEffect, useState } from "react";
@@ -20,7 +20,14 @@ function App() {
     });
   }, [])
 
-  console.log('ORDERS', orders)
+  function postNewOrder(newOrder) {
+    addOrder(newOrder)
+      .then((data) => setOrders([...orders, data]))
+      .catch((error) => {
+        console.log(error.message);
+        setError(`${error.message}: Something went wrong. Please try again.`);
+      });
+  }
 
   return (
     <main className="App">
@@ -31,7 +38,8 @@ function App() {
       orders={orders}
       setOrders={setOrders}
       setError={setError}
-      error={error} />
+      error={error}
+      postNewOrder={postNewOrder} />
       {orders.length ?
        <Orders orders={orders}  /> :
         <p>There are currently no orders.</p>
