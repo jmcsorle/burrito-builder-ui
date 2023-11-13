@@ -1,19 +1,24 @@
 import './OrderForm.css';
 import { useState } from "react";
 
-function OrderForm({ orders }) {
+function OrderForm({ orders, setOrders, error, setError}) {
   const [name, setName] = useState("");
   const [ingredients, setIngredients] = useState([]);
 
   function handleSubmit(event) {
     event.preventDefault();
-    const newOrder = {
-      id: orders.length +1,
-      name: name,
-      ingredients: ingredients,
+
+    if (name.trim() === "" || ingredients.length === 0) {
+      setError("We're sorry. Your order is incomplete. Please provide both a name and ingredients to complete your order.")
+    } else {
+      const newOrder = {
+        id: orders.length + 1,
+        name: name,
+        ingredients: ingredients,
+      }
+      setOrders([...orders, newOrder]);
+      clearInputs();
     }
-    setOrders([...orders, newOrder]);
-    clearInputs();
   }
 
   function handleClick(ingredient) {
@@ -23,6 +28,7 @@ function OrderForm({ orders }) {
   function clearInputs() {
     setName("");
     setIngredients([]);
+    setError("");
   };
 
   const possibleIngredients = [
@@ -66,7 +72,12 @@ function OrderForm({ orders }) {
 
       {ingredientButtons}
 
-      <p>Order: {ingredients.join(", ") || "Nothing selected"}</p>
+      {error && (
+        <p className="error">{error}</p>
+      )}
+
+      {!error && (
+      <p className="default-message">New Order: {ingredients.join(", ") || "Nothing is selected yet."}</p>)}
 
       <button onClick={(event) => handleSubmit(event)}>Submit Order</button>
     </form>

@@ -22,22 +22,20 @@ function App() {
 
   console.log('ORDERS', orders)
 
-
-  
-
   return (
     <main className="App">
       <header>
         <h1>Burrito Builder</h1>
       </header>
-      <OrderForm orders={orders} setOrders={setOrders} />
+      <OrderForm
+      orders={orders}
+      setOrders={setOrders}
+      setError={setError}
+      error={error} />
       {orders.length ?
        <Orders orders={orders}  /> :
         <p>There are currently no orders.</p>
       }
-
-     
-
     </main>
   );
 }
